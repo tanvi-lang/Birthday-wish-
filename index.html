@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Love</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400&display=swap');
+
+        :root {
+            --bg-color: #f7ede2;
+            --text-color: #3d342e;
+            --accent-color: #bc6c25;
+            --heart-color: #cdb4db;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Ambient Grain Overlay for that lo-fi, vintage look */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* --- INTRO ENVELOPE SCREEN --- */
+        #intro-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #fcf8f2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1.2s ease, visibility 1.2s;
+        }
+
+        .envelope-wrapper {
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.03);
+        }
+
+        .envelope-icon {
+            font-size: 4rem;
+            color: #b76e79;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .envelope-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-top: 15px;
+            letter-spacing: 1px;
+            color: #8a7a70;
+        }
+
+        /* --- MAIN CONTENT --- */
+        #main-content {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 2s ease;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        header {
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            color: #4a3b32;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 15px;
+            color: #a89486;
+        }
+
+        /* --- POLAROID GALLERY --- */
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 50px 0;
+        }
+
+        .polaroid {
+            background: #ffffff;
+            padding: 15px 15px 40px 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transform: rotate(-2deg);
+            transition: transform 0.4s ease;
+            max-width: 260px;
+        }
+
+        .polaroid:nth-child(even) {
+            transform: rotate(3deg);
+            margin-top: 15px;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            filter: sepia(15%) contrast(95%); /* Soft vintage filter */
+        }
+
+        .polaroid .caption {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            color: #65564d;
+        }
+
+        /* --- THE LETTER --- */
+        .love-letter {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 60px auto;
+            text-align: justify;
+            text-justify: inter-word;
+            color: #4a3b32;
+            border-left: 2px solid #e9dcd0;
+            padding-left: 30px;
+        }
+
+        /* --- PETAL ANIMATION --- */
+        .petal {
+            position: fixed;
+            top: -10%;
+            pointer-events: none;
+            z-index: 50;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fall {
+            0% {
+                top: -5%;
+                transform: translateX(0) rotate(0deg);
+            }
+            100% {
+                top: 105%;
+                transform: translateX(100px) rotate(360deg);
+            }
+        }
+
+        /* Utility class to fade out intro */
+        .hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none;
+        }
+
+        .visible {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Intro Envelope Screen -->
+    <div id="intro-screen" onclick="openWebsite()">
+        <div class="envelope-wrapper">
+            <div class="envelope-icon">✉</div>
+            <p class="envelope-text">A birthday letter for you. Click to open.</p>
+        </div>
+    </div>
+
+    <!-- Main Aesthetic Content -->
+    <div id="main-content">
+        <header>
+            <p class="subtitle">To Someone Extraordinarily Special</p>
+            <h1>Happy Birthday,<br>Beautiful Soul</h1>
+        </header>
+
+        <!-- Polaroid Showcase (Replace image URLs with your own photos later!) -->
+        <div class="gallery">
+            <div class="polaroid">
+                <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600" alt="Memory 1">
+                <div class="caption">The way you smile...</div>
+            </div>
+            <div class="polaroid">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600" alt="Memory 2">
+                <div class="caption">My favorite chapter.</div>
+            </div>
+        </div>
+
+        <!-- The Romantic Letter -->
+        <article class="love-letter">
+            <p>
+                Today is all about celebrating the light you bring into this world. Of all the paths I could have walked, finding myself alongside you has been the most beautiful turn of events. 
+            </p>
+            <br>
+            <p>
+                Thank you for being your perfectly genuine, artistic, and soft-hearted self. May this trip around the sun bring you as much unprompted warmth and peace as you effortlessly give to everyone around you. Happy Birthday.
+            </p>
+        </article>
+    </div>
+
+    <script>
+        // Reveal the main page content and trigger animations
+        function openWebsite() {
+            document.getElementById('intro-screen').classList.add('hidden');
+            
+            const mainContent = document.getElementById('main-content');
+            mainContent.classList.add('visible');
+
+            // Start romantic falling petals
+            setInterval(createPetal, 400);
+        }
+
+        // Falling Petals / Hearts Generator
+        function createPetal() {
+            const petalSymbols = ['🌸', '🌹', '✨', '♥'];
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            
+            // Randomly select a romantic particle type
+            petal.innerText = petalSymbols[Math.floor(Math.random() * petalSymbols.length)];
+            
+            // Randomize position, size, and falling speed
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = Math.random() * 3 + 4 + 's'; // Between 4s and 7s
+            petal.style.fontSize = Math.random() * 15 + 15 + 'px'; // Between 15px and 30px
+            
+            document.body.appendChild(petal);
+
+            // Remove petal after it finishes falling to save browser performance
+            setTimeout(() => {
+                petal.remove();
+            }, 7000);
+        }
+    </script>
+</body>
+</html>
